@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <title>React Charts</title>
+    <script src="http://fb.me/react-0.9.0.js"></script>
+    <script src="http://fb.me/JSXTransformer-0.9.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+    <script src="http://www.chartjs.org/assets/Chart.js"></script>
+  </head>
+  <body>
+    <div id="chartjs"></div>
+    <script type="text/jsx">
+      /**
+       * @jsx React.DOM
+       */
+      // The above declaration must remain intact at the top of the script.
+
+      var data = { labels : ["January","February","March","April","May","June","July", "September", "October", "November", "December"],
+                   datasets : [
+                     {
+                  	   fillColor : "rgba(220,220,220,0.5)",
+                  		 strokeColor : "rgba(220,220,220,1)",
+                  		 pointColor : "rgba(220,220,220,1)",
+                  		 pointStrokeColor : "#fff",
+                  		 data : [15,30,20,24,50,26,70,40,39,23,40,15]
+                  	 },
+                  	 {
+                  	   fillColor : "rgba(151,187,205,0.5)",
+                  		 strokeColor : "rgba(151,187,205,1)",
+                  		 pointColor : "rgba(151,187,205,1)",
+                  		 pointStrokeColor : "#fff",
+                       data : [10,20,15,21,31,21,55,9,24,14,18,13]
+                  	 }
+                   ]
+                 };
+
+      var LineChart = React.createClass({
+        componentDidMount: function() {
+          var chartContext = document.getElementById(this.props.id).getContext("2d");
+          new Chart(chartContext).Line(data, {});
+        },
+
+        render: function() {
+          return (
+            <canvas id={this.props.id} width={this.props.width} height={this.props.height}></canvas>
+          );
+        }
+      });
+
+      React.renderComponent(<LineChart id="lineChart" width="400" height="400" />, document.getElementById("chartjs"));
+    </script>
+  </body>
+</html>
