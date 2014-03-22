@@ -14,28 +14,43 @@
        */
       // The above declaration must remain intact at the top of the script.
 
-      var data = { labels : ["January","February","March","April","May","June","July", "September", "October", "November", "December"],
-                   datasets : [
-                     {
-                  	   fillColor : "rgba(220,220,220,0.5)",
-                  		 strokeColor : "rgba(220,220,220,1)",
-                  		 pointColor : "rgba(220,220,220,1)",
-                  		 pointStrokeColor : "#fff",
-                  		 data : [15,30,20,24,50,26,70,40,39,23,40,15]
-                  	 },
-                  	 {
-                  	   fillColor : "rgba(151,187,205,0.5)",
-                  		 strokeColor : "rgba(151,187,205,1)",
-                  		 pointColor : "rgba(151,187,205,1)",
-                  		 pointStrokeColor : "#fff",
-                       data : [10,20,15,21,31,21,55,9,24,14,18,13]
-                  	 }
-                   ]
-                 };
+      //Configuration
+      var months = ["January","February","March","April","May","June","July", "September", "October", "November", "December"];
 
+      var data01 = [15,30,20,24,50,26,70,40,39,23,40,15];
+      var data02 = [10,20,15,21,31,21,55,9,24,14,18,13];
+
+      var data = [data01, data02];
+
+      var data01style = { fillColor : "rgba(220,220,220,0.5)",
+                          strokeColor : "rgba(220,220,220,1)",
+                          pointColor : "rgba(220,220,220,1)",
+                          pointStrokeColor : "#fff" };
+      var data02style = { fillColor: "rgba(151,187,205,0.5)",
+                          strokeColor: "rgba(151,187,205,1)",
+                          pointColor: "rgba(151,187,205,1)",
+                          pointStrokeColor : "#fff" };
+
+      var dataStyles = [data01style, data02style];
+
+      //Components
       var LineChart = React.createClass({
+        createDataConfiguration: function() {
+          var data = this.props.data;
+          var dataStyles = this.props.dataStyles;
+          var datasets = [];
+
+          for (i = 0; i < data.length; ++i) {
+            dataStyles[i].data = data[i];
+            datasets.push(dataStyles[i]);
+          }
+          
+          return { labels: this.props.xlabels, datasets: datasets };
+        },
+
         componentDidMount: function() {
           var chartContext = document.getElementById(this.props.id).getContext("2d");
+          var data = this.createDataConfiguration();
           new Chart(chartContext).Line(data, {});
         },
 
@@ -46,7 +61,13 @@
         }
       });
 
-      React.renderComponent(<LineChart id="lineChart" width="400" height="400" />, document.getElementById("chartjs"));
+      React.renderComponent(<LineChart id="lineChart"
+                                       width="400"
+                                       height="400"
+                                       xlabels={months}
+                                       data={data}
+                                       dataStyles={dataStyles} />,
+                            document.getElementById("chartjs"));
     </script>
   </body>
 </html>
